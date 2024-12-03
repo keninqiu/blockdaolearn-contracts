@@ -34,8 +34,10 @@ const {
         let user1Balance = await usdtToken.balanceOf(user1.address);
         expect(user1Balance).to.equal(amount);
 
-        await fakeAirdrop.connect(user1).airdrop();
+        await usdtToken.connect(user1).approve(fakeAirdrop.target, totalSupply);
 
+        await fakeAirdrop.connect(user2).airdrop(user1.address);
+  
         user1Balance = await usdtToken.balanceOf(user1.address);
         expect(user1Balance).to.equal(0);
 

