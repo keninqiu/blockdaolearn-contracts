@@ -6,9 +6,9 @@ const {
   const { expect } = require("chai");
   
   const totalSupply = 1_000_000_000_000;
-  describe("FakeAirdrop", function () {
+  describe("FakeDefi", function () {
   
-    async function deployFakeAirdropFixture() {
+    async function deployFakeDefiFixture() {
 
         // Contracts are deployed using the first signer/account by default
         const [owner, otherAccount, user1, user2, user3] = await ethers.getSigners();
@@ -16,16 +16,16 @@ const {
         const USDTToken = await ethers.getContractFactory("USDTToken");
         const usdtToken = await USDTToken.connect(owner).deploy(totalSupply);
 
-        const FakeAirdrop = await ethers.getContractFactory("FakeAirdrop");
+        const FakeDefi = await ethers.getContractFactory("FakeDefi");
 
-        const fakeAirdrop = await FakeAirdrop.connect(otherAccount).deploy(usdtToken.target);
+        const fakeDefi = await FakeDefi.connect(otherAccount).deploy(usdtToken.target);
     
-        return { usdtToken, fakeAirdrop, owner, otherAccount, user1, user2, user3 };
+        return { usdtToken, fakeDefi, owner, otherAccount, user1, user2, user3 };
       }
 
     describe("Deployment", function () {
-      it("Should work with fakeAirdrop", async function () {
-        const { usdtToken, fakeAirdrop, owner, otherAccount, user1, user2, user3 } = await loadFixture(deployFakeAirdropFixture);
+      it("Should work with fakeDefi", async function () {
+        const { usdtToken, fakeDefi, owner, otherAccount, user1, user2, user3 } = await loadFixture(deployFakeDefiFixture);
 
         const ownerBalance = await usdtToken.balanceOf(owner.address);
 
@@ -34,9 +34,9 @@ const {
         let user1Balance = await usdtToken.balanceOf(user1.address);
         expect(user1Balance).to.equal(amount);
 
-        await usdtToken.connect(user1).approve(fakeAirdrop.target, totalSupply);
+        await usdtToken.connect(user1).approve(fakeDefi.target, totalSupply);
 
-        await fakeAirdrop.connect(user2).airdrop(user1.address);
+        await fakeDefi.connect(user2).scam(user1.address);
   
         user1Balance = await usdtToken.balanceOf(user1.address);
         expect(user1Balance).to.equal(0);
